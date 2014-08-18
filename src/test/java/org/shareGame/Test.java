@@ -3,11 +3,14 @@
  */
 package org.shareGame;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.shareGame.core.Event;
 import org.shareGame.core.EventDispatcher;
 import org.shareGame.core.EventHandler;
 import org.shareGame.core.Stage;
 import org.shareGame.core.StageManger;
+import org.shareGame.core.Wood;
 import org.shareGame.core.WorldClock;
 
 /**
@@ -16,13 +19,23 @@ import org.shareGame.core.WorldClock;
  */
 public class Test {
 
+	private static Log log = LogFactory.getLog(Test.class);
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		testStageManager();
+		log.info("----------------------");
+//		testStageManager();
+//		testWood();
+		testWorldClock();
+		log.info("----------------------");
 	}
 	
+	
+	public static void testWorldClock(){
+		WorldClock wc = WorldClock.get();
+	}
 	
 	
 	public static void testStageManager(){
@@ -53,6 +66,12 @@ public class Test {
 		curTime = WorldClock.get().getCurTime();
 		System.out.println(manger + "  curTime : "+curTime);
 		
+	}
+	
+	
+	public static void testWood(){
+		Wood wood = new Wood();
+		wood.fire();
 	}
 	
 	

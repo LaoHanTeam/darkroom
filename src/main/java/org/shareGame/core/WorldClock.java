@@ -13,9 +13,10 @@ public class WorldClock {
 	/**
 	 * 游戏时间和电脑时间之间的差距
 	 */
-	private static final long timeScale = 5*1000*60;
+	public static final long timeScale = 5*1000*60;
 	
 	private transient long curTime ;
+	
 	
 	private Thread clock;
 	
@@ -31,12 +32,18 @@ public class WorldClock {
 			@Override
 			public void run() {
 				try {
-					synchronized (instance) {
-						curTime ++;
+					while(!isInterrupted()){
+						synchronized (instance) {
+								curTime ++;
+						}
+						System.out.println(curTime);
+						try {
+							Thread.sleep(timeScale);
+						} catch (InterruptedException e) {
+						}
 					}
-					Thread.sleep(timeScale);
-				} catch (InterruptedException e) {
-					throw new RuntimeException("时钟已经停止！");
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 			
