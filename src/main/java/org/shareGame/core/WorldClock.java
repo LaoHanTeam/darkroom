@@ -20,7 +20,7 @@ public class WorldClock {
 	 */
 	public static final long timeScale = 5*1000*60;
 	
-	private transient long curTime ;
+	private volatile long curTime ;
 	
 	
 	private Thread clock;
