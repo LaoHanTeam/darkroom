@@ -14,7 +14,7 @@ public class DepositoryTest {
         exec.execute(new MeatProduce());
         exec.execute(new WoodsConsume());
         exec.execute(new MeatConsume());
-        exec.execute(new WoodsProduce());
+//        exec.execute(new WoodsProduce());
         System.out.println("end");
         exec.shutdown();
     }
