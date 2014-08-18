@@ -29,7 +29,7 @@ public class Depository {
      * @param res 资源类型
      * @return 入库是否成功
      */
-    public boolean produceDepository(ResourceItem res) {
+    public boolean produceDepository(ResourceItem res) { 
         boolean flag = false;
         if (res != null && !res.isItemEmpty()) {
             synchronized (instance) {
