@@ -3,15 +3,21 @@
  */
 package org.shareGame.core;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.shareGame.core.event.GameOverEvent;
+
 
 /**
  * @author ledkk
  *
  */
 public class Wood extends Resource {
-	public static final long fireLength = 10*WorldClock.timeScale;
+	private static final Log logger = LogFactory.getLog(Wood.class);
+	
+	public static final long fireLength = (long)0.5*WorldClock.timeScale;
+	
+	private static final Event fireOverE = new Event("FIRE_OVER");
 	
 	/**
 	 * 可燃烧的时长
@@ -38,6 +44,16 @@ public class Wood extends Resource {
 	 * 点燃火柴
 	 */
 	public void fire(){
+		EventDispatcher.get().registerEvent(fireOverE, new EventHandler<Event>() {
+
+			@Override
+			public boolean handle(Event event) {
+				logger.info("火烧完了。。。 又要变冷了。。。。。");
+				logger.info("-------GAME OVER----------");
+				EventDispatcher.get().dispatch(new GameOverEvent());
+				return false;
+			}
+		});
 		Thread fireThread = new Thread("FIRE"){
 
 			@Override
@@ -46,11 +62,12 @@ public class Wood extends Resource {
 					while(proce >=0 ){
 						proce --;
 						if(proce <=0){
-							System.out.println("我靠，烧完了~~~~~~~");
+							System.out.println(WorldClock.get().getCurTime()+"我靠，烧完了~~~~~~~");
+							EventDispatcher.get().dispatch(fireOverE);
 							return ;
 						}
-						System.out.println("我烧烧烧~~~~~~~ oh ~~ 还剩"+proce+" 可以烧了！！！");
-						Thread.sleep(100/fireLength);
+						System.out.println(WorldClock.get().getCurTime()+"我烧烧烧~~~~~~~ oh ~~ 还剩"+proce+" 可以烧了！！！");
+						Thread.sleep(fireLength/100);
 					}
 				} catch (InterruptedException e) {
 				}
@@ -58,7 +75,7 @@ public class Wood extends Resource {
 			
 		};
 		
-		fireThread.setDaemon(true);
+//		fireThread.setDaemon(true);
 		fireThread.start();
 	}
 }
