@@ -3,6 +3,9 @@
  */
 package org.shareGame.core;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * 游戏中的时钟
@@ -10,12 +13,14 @@ package org.shareGame.core;
  *
  */
 public class WorldClock {
+	
+	private static final Log logger = LogFactory.getLog(WorldClock.class);
 	/**
 	 * 游戏时间和电脑时间之间的差距
 	 */
 	public static final long timeScale = 5*1000*60;
 	
-	private transient long curTime ;
+	private volatile long curTime ;
 	
 	
 	private Thread clock;
@@ -31,24 +36,22 @@ public class WorldClock {
 		clock = new Thread("WorldClock"){
 			@Override
 			public void run() {
-				try {
-					while(!isInterrupted()){
-						synchronized (instance) {
-								curTime ++;
-						}
-						System.out.println(curTime);
-						try {
-							Thread.sleep(timeScale);
-						} catch (InterruptedException e) {
-						}
+				while(!isInterrupted()){
+					synchronized (instance) {
+							curTime ++;
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println(curTime);
+					try {
+						Thread.sleep(timeScale);
+					} catch (InterruptedException e) {
+						logger.info("--------------结束------");
+						return ;
+					}
 				}
 			}
 			
 		};
-		clock.setDaemon(true);
+//		clock.setDaemon(true);
 		clock.start();
 	}
 	

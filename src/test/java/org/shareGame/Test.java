@@ -27,8 +27,8 @@ public class Test {
 	public static void main(String[] args) {
 		log.info("----------------------");
 //		testStageManager();
-//		testWood();
-		testWorldClock();
+		testWood();
+//		testWorldClock();
 		log.info("----------------------");
 	}
 	

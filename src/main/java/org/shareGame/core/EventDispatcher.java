@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.shareGame.core.event.GameOverEvent;
 import org.shareGame.utils.CollectionUtils;
 
 /**
@@ -16,6 +19,7 @@ import org.shareGame.utils.CollectionUtils;
  * 
  */
 public class EventDispatcher {
+	private static Log logger = LogFactory.getLog(EventDispatcher.class);
 	private static final EventDispatcher instance = new EventDispatcher();
 	
 	/**
@@ -62,5 +66,19 @@ public class EventDispatcher {
 			handleStore.put(eventType, handles);
 		}
 		handles.add((EventHandler<? super Event>) handler);
+	}
+	
+	
+	
+	static{
+		EventDispatcher.get().registerEvent(new GameOverEvent(), new EventHandler<GameOverEvent>() {
+
+			@Override
+			public boolean handle(GameOverEvent event) {
+				logger.info("------------game over ------------------");
+				WorldClock.get().stop();
+				return false;
+			}
+		});
 	}
 }
