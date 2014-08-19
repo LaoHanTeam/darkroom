@@ -33,7 +33,6 @@ public class Depository {
         boolean flag = false;
         if (res != null && !res.isItemEmpty()) {
             synchronized (instance) {
-                displayDepository();
                 if (depository.containsKey(res.getResourceName())) {
                     Integer sum = depository.get(res.getResourceName()) + res.getResourceNum();
                     depository.put(res.getResourceName(), sum);
@@ -41,9 +40,9 @@ public class Depository {
                     depository.put(res.getResourceName(), res.getResourceNum());
                 }
                 flag = true;
-                System.out.println("产生" + res.getResourceNum() + "单位" + res.getResourceName());
-                displayDepository();
             }
+        } else {
+            log.error("入参不能为空", new IllegalArgumentException());
         }
         return flag;
     }
@@ -57,32 +56,29 @@ public class Depository {
         boolean flag = false;
         if (res != null && !res.isItemEmpty()) {
             synchronized (instance) {
-                displayDepository();
                 if (depository.containsKey(res.getResourceName())
                     && depository.get(res.getResourceName()) >= res.getResourceNum()) {
                     if (depository.get(res.getResourceName()) > res.getResourceNum()) {
                         Integer diff = depository.get(res.getResourceName()) - res.getResourceNum();
                         depository.put(res.getResourceName(), diff);
-                        System.out.println("消耗" + res.getResourceNum() + "单位"
-                                           + res.getResourceName());
                     } else {
                         depository.remove(res.getResourceName());//消耗过后资源数目为零直接删除该资源
-                        System.out.println("消耗" + res.getResourceNum() + "单位"
-                                           + res.getResourceName());
                     }
+                    flag = true;
                 } else {
-                    //System.err.println("资源不存在或数量不足！");
                     log.info("资源不存在或数量不足！");
                 }
 
-                displayDepository();
             }
+        } else {
+            log.error("入参不能为空", new IllegalArgumentException());
         }
         return flag;
     }
 
-    private static void displayDepository() {
-        System.out.println(depository);
+    @Override
+    public String toString() {
+        return depository.toString();
     }
 
 }
